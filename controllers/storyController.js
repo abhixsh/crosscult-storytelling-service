@@ -37,7 +37,10 @@ exports.getStories = async (req, res) => {
         const storiesWithUserDetails = await Promise.all(
             stories.map(async (story) => {
                 const user = await getUserDetailsByUsername(story.username);
-                return { ...story._doc, user: user || { name: 'Unknown', username: story.username } };
+                return { 
+                    ...story._doc, 
+                    user: user ? { name: user.name, username: user.username } : { name: 'Unknown', username: story.username } 
+                };
             })
         );
 
@@ -56,7 +59,10 @@ exports.getStory = async (req, res) => {
         if (!story) return res.status(404).json({ message: 'Story not found' });
 
         const user = await getUserDetailsByUsername(story.username);
-        res.status(200).json({ ...story._doc, user: user || { name: 'Unknown', username: story.username } });
+        res.status(200).json({
+            ...story._doc, 
+            user: user ? { name: user.name, username: user.username } : { name: 'Unknown', username: story.username }
+        });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching story', error });
     }
