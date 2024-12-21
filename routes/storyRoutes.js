@@ -1,12 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {
-    createStory,
-    getStories,
-    getStory,
-    updateStory,
-    deleteStory,
-} = require('../controllers/storyController');
+const { createStory, getStories, getStory, updateStory, deleteStory } = require('../controllers/storyController');
 
 router.post('/', createStory);
 router.get('/', getStories);

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const storySchema = new mongoose.Schema({
-    user_id: { type: String, required: true },
+    username: { type: String, required: true }, // User is identified by their username
     title: { type: String, required: true },
     content: { type: String, required: true },
     short_content: { type: String },
