@@ -6,8 +6,18 @@ exports.createStory = async (req, res) => {
     const { username, title, content, short_content, tags, preview_img, img_link, badge, season } = req.body;
 
     try {
+        // Log incoming request data for debugging purposes
+        console.log(`Creating story for user: ${username}`);
+
         const user = await getUserDetailsByUsername(username);
-        if (!user) return res.status(404).json({ message: 'User not found in User repo' });
+
+        // Log user data
+        console.log('Fetched user data:', user);
+
+        if (!user) {
+            // Return message if the user is not found
+            return res.status(404).json({ message: 'User not found in User repo' });
+        }
 
         const story = new Story({
             username,
@@ -21,48 +31,38 @@ exports.createStory = async (req, res) => {
             season,
             month: new Date().toLocaleString('default', { month: 'long' }),
         });
+
         await story.save();
 
         res.status(201).json({ message: 'Story created successfully', story });
     } catch (error) {
+        // Log the error for debugging
+        console.error('Error creating story:', error.message);
+
         res.status(500).json({ message: 'Error creating story', error });
     }
 };
+
 
 // Get all stories
 exports.getStories = async (req, res) => {
     try {
         const stories = await Story.find();
-
-        const storiesWithUserDetails = await Promise.all(
-            stories.map(async (story) => {
-                const user = await getUserDetailsByUsername(story.username);
-                return { 
-                    ...story._doc, 
-                    user: user ? { name: user.name, username: user.username } : { name: 'Unknown', username: story.username } 
-                };
-            })
-        );
-
-        res.status(200).json(storiesWithUserDetails);
+        res.status(200).json(stories); // Send an array of stories as the response
     } catch (error) {
         res.status(500).json({ message: 'Error fetching stories', error });
     }
 };
 
-// Get a story by ID
+// Get a single story by its ID
 exports.getStory = async (req, res) => {
     const { storyId } = req.params;
-
     try {
         const story = await Story.findById(storyId);
-        if (!story) return res.status(404).json({ message: 'Story not found' });
-
-        const user = await getUserDetailsByUsername(story.username);
-        res.status(200).json({
-            ...story._doc, 
-            user: user ? { name: user.name, username: user.username } : { name: 'Unknown', username: story.username }
-        });
+        if (!story) {
+            return res.status(404).json({ message: 'Story not found' });
+        }
+        res.status(200).json(story);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching story', error });
     }

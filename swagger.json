@@ -1,0 +1,266 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Storytelling API",
+        "description": "API documentation for the Storytelling platform.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5001"
+        }
+    ],
+    "paths": {
+        "/stories": {
+            "post": {
+                "summary": "Create a new story",
+                "tags": [
+                    "Story"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Story"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Story created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Story"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "get": {
+                "summary": "Get all stories",
+                "tags": [
+                    "Story"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully fetched all stories",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Story"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/stories/{storyId}": {
+            "get": {
+                "summary": "Get a specific story",
+                "tags": [
+                    "Story"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "storyId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Story ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully fetched the story",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Story"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Story not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a specific story",
+                "tags": [
+                    "Story"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "storyId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Story ID"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Story"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated the story",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Story"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Story not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a specific story",
+                "tags": [
+                    "Story"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "storyId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Story ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Story deleted successfully"
+                    },
+                    "404": {
+                        "description": "Story not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Story": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "The username of the user who posted the story"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "The title of the story"
+                    },
+                    "content": {
+                        "type": "string",
+                        "description": "The full content of the story"
+                    },
+                    "short_content": {
+                        "type": "string",
+                        "description": "A short description or summary of the story"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Tags related to the story"
+                    },
+                    "preview_img": {
+                        "type": "string",
+                        "description": "URL to the preview image"
+                    },
+                    "img_link": {
+                        "type": "string",
+                        "description": "URL to the image related to the story"
+                    },
+                    "badge": {
+                        "type": "string",
+                        "description": "A badge associated with the story (e.g., featured)"
+                    },
+                    "season": {
+                        "type": "string",
+                        "description": "The season for the story (e.g., spring, summer)"
+                    },
+                    "month": {
+                        "type": "string",
+                        "description": "The month the story was posted"
+                    },
+                    "posted_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The timestamp when the story was posted"
+                    },
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "The name of the user who posted the story"
+                            },
+                            "username": {
+                                "type": "string",
+                                "description": "The username of the user"
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "username",
+                    "title",
+                    "content",
+                    "tags",
+                    "preview_img",
+                    "img_link",
+                    "badge",
+                    "season",
+                    "month"
+                ]
+            }
+        }
+    }
+}
