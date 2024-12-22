@@ -12,6 +12,7 @@ const storySchema = new mongoose.Schema({
     season: { type: String },
     month: { type: String },
     posted_date: { type: Date, default: Date.now },
+    country: { type: String },
 });
 
 const Story = mongoose.model('Story', storySchema);
